@@ -24,6 +24,15 @@ LIFE_JOURNAL_HOME=/path/to/your/vault npm run dev
 
 真实 Vault 建议只在本机运行，不应直接部署到公开互联网。
 
+## 安装 Skill
+
+站点构建会生成 `public/life-journal-skill.tar.gz`。解压后将 `life-journal` 文件夹放入 Codex 的 Skill 目录，或直接从源码使用：
+
+```bash
+mkdir -p ~/.codex/skills
+tar -xzf life-journal-skill.tar.gz -C ~/.codex/skills
+```
+
 ## 项目结构
 
 - `skill/life-journal`：标准 Life Journal Skill。

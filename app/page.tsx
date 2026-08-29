@@ -166,7 +166,7 @@ export default function Home() {
         <h2>先写下今天，<br />剩下的让系统慢慢生长。</h2>
         <p>项目包含标准 Skill、空白 Vault 模板、虚构 Demo、解析验证工具与完整 Web 界面。</p>
         <div className="install-box"><code>$life-journal 帮我初始化一个生活记录库</code><span>自然语言开始</span></div>
-        <div className="hero-actions centered-actions"><a className="button button-primary" href="/journal">打开 Demo</a><a className="button button-quiet" href="/method">阅读方法说明</a></div>
+        <div className="hero-actions centered-actions"><a className="button button-primary" href="/life-journal-skill.tar.gz" download>下载 Skill 包</a><a className="button button-quiet" href="/journal">打开 Demo</a><a className="button button-quiet" href="/method">阅读方法说明</a></div>
       </section>
 
       <footer className="landing-footer"><a className="brand" href="#top"><span className="brand-mark">LJ</span><span>Life Journal</span></a><p>Markdown belongs to you.</p><span>虚构 Demo · 2026</span></footer>
