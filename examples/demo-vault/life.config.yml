@@ -1,0 +1,48 @@
+version: 1
+
+journal:
+  locale: zh-CN
+  timezone: Asia/Shanghai
+  week_format: chinese
+  lunar_calendar: true
+
+content:
+  diary: diary.md
+  people: person.md
+  places: places.md
+  thoughts: thoughts.md
+  media: media.md
+  experiences_index: experiences.md
+  experiences_directory: experiences
+
+capabilities:
+  lunar:
+    enabled: true
+    provider: configurable
+  geocoding:
+    enabled: false
+    provider: configurable
+    api_key_env: MAP_API_KEY
+    max_candidates: 5
+
+site:
+  title: 林舟的生活记录
+  description: 一份完全虚构的 Life Journal 演示数据
+
+theme:
+  preset: paper
+  mode: auto
+  overrides:
+    colors:
+      accent: "#526d5d"
+
+features:
+  search: true
+  statistics: true
+  map: true
+
+privacy:
+  show_people_descriptions: true
+  show_exact_coordinates: false
+  include_raw_markdown_download: false
+  external_analytics: false

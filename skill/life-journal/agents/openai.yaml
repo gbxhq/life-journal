@@ -1,0 +1,8 @@
+interface:
+  display_name: "Life Journal"
+  short_description: "用 AI 维护本地 Markdown 日记、人物、地点与生活经验"
+  brand_color: "#526D5D"
+  default_prompt: "Use $life-journal to initialize or maintain my local Markdown life journal."
+
+policy:
+  allow_implicit_invocation: true

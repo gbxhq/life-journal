@@ -1,0 +1,46 @@
+version: 1
+
+journal:
+  locale: zh-CN
+  timezone: Asia/Shanghai
+  week_format: chinese
+  lunar_calendar: true
+
+content:
+  diary: diary.md
+  people: person.md
+  places: places.md
+  thoughts: thoughts.md
+  media: media.md
+  experiences_index: experiences.md
+  experiences_directory: experiences
+
+capabilities:
+  lunar:
+    enabled: true
+    provider: configurable
+  geocoding:
+    enabled: false
+    provider: configurable
+    api_key_env: MAP_API_KEY
+    max_candidates: 5
+
+site:
+  title: 我的生活记录
+  description: 使用 Markdown 保存的人生记录
+
+theme:
+  preset: paper
+  mode: auto
+  overrides: {}
+
+features:
+  search: true
+  statistics: true
+  map: false
+
+privacy:
+  show_people_descriptions: true
+  show_exact_coordinates: false
+  include_raw_markdown_download: false
+  external_analytics: false

@@ -1,0 +1,23 @@
+name: Midnight
+mode: dark
+colors:
+  background: "#151918"
+  background_deep: "#0f1211"
+  surface: "#202624"
+  surface_muted: "#29312e"
+  text: "#edf1ec"
+  muted: "#a8b3aa"
+  accent: "#9fc5a9"
+  accent_dark: "#c2dfc8"
+  warm: "#d5a36c"
+  border: "rgba(222, 238, 226, 0.15)"
+typography:
+  body: "Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+  display: "Georgia, 'Times New Roman', 'Songti SC', serif"
+radius:
+  card: "24px"
+  control: "999px"
+spacing:
+  content_width: "1240px"
+effects:
+  shadow: "0 24px 70px rgba(0, 0, 0, 0.28)"
