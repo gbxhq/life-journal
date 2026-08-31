@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && node scripts/export-static.mjs",
+  "buildCommand": "npm run build",
   "outputDirectory": "out",
   "framework": null
 }

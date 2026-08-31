@@ -22,7 +22,7 @@
     "predev": "npm run content:build",
     "dev": "WRANGLER_LOG_PATH=.wrangler/logs vinext dev",
     "prebuild": "mkdir -p .wrangler/logs && npm run content:build && npm run skill:package",
-    "build": "WRANGLER_LOG_PATH=.wrangler/logs vinext build",
+    "build": "node scripts/build-and-export.mjs",
     "export": "node scripts/export-static.mjs",
     "start": "WRANGLER_LOG_PATH=.wrangler/logs vinext start",
     "test": "npm run content:build && node --test tests/content-core.test.mjs tests/skill-scripts.test.mjs tests/responsive-navigation.test.mjs",
