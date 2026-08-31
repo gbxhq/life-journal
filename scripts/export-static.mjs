@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,14 +18,15 @@ async function exportAll() {
     fs.cpSync(distClientDir, outDir, { recursive: true });
   }
 
-  // 2. Load worker
+  // 2. Load worker via proper file URL
   const workerFile = path.join(rootDir, 'dist', 'server', 'index.js');
   if (!fs.existsSync(workerFile)) {
     console.error('Missing dist/server/index.js build output');
     process.exit(1);
   }
 
-  const { default: worker } = await import(workerFile);
+  const workerUrl = pathToFileURL(workerFile).href;
+  const { default: worker } = await import(workerUrl);
 
   // 3. Load vault data to discover routes
   const vaultPath = path.join(rootDir, 'generated', 'vault.json');
