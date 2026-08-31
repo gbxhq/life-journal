@@ -71,9 +71,7 @@ tar -xzf life-journal-skill.tar.gz -C ~/.agents/skills
 - `SKILL.md`、`references/` 和 `scripts/` 共同组成完整能力包，集中定义分类、格式、人物与地点判断、安全边界和验证流程。
 - 用户 Vault 只保存 Markdown 数据与 `life.config.yml`。配置文件负责语言、时区、外部服务、主题和隐私选项，不再承担自然语言行为约束。
 
-从 schema version 2 开始，新 Vault 不再包含 `AI_GUIDE.md`。这样通过 `npx skills update -g` 更新 Skill 时，整套记录机制会一起更新，用户日记不会被覆盖。
-
-旧 Vault 中的 `AI_GUIDE.md` 会被视为遗留文件：系统不会继续把它当规则源，也不会自动删除。用户可以让 Agent 先检查其中是否还有个人定制，再确认迁移和删除。
+Vault 不保存额外的自然语言规则文件。这样通过 `npx skills update -g` 更新 Skill 时，整套记录机制会一起更新，用户日记不会被覆盖。
 
 ## 打开前端阅读界面
 

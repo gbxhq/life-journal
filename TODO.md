@@ -75,7 +75,7 @@ Life Journal 最初强调用一两句话完成记录，避免为了写日记投�
 **状态：** 首版实现中
 
 - [x] Skill 安装目录与用户 Vault 完全分离。
-- [x] 将完整记录规则统一收入 Skill，新 Vault 不再生成 `AI_GUIDE.md`。
+- [x] 将完整记录规则统一收入 Skill，Vault 只保存数据与结构化配置。
 - [x] 增加 `schema_version`，支持只读结构版本检查。
 - [x] 增加 Codex Plugin 与仓库 Marketplace 包装。
 - [ ] GitHub 仓库发布后，在 README 中写入准确的安装与更新命令。

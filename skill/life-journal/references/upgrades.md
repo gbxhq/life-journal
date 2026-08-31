@@ -36,9 +36,3 @@ When a newer schema is available:
 5. Back up each file that will change, apply the smallest migration, update `schema_version`, and validate the Vault.
 
 If no migration note exists for a version gap, report that manual review is required instead of guessing.
-
-## Legacy `AI_GUIDE.md`
-
-Vaults created before schema version 2 may contain `AI_GUIDE.md`. The file is no longer required and must not override the installed Skill.
-
-Before deleting it, review it once for actual user-specific preferences. Standard Life Journal rules are already in the Skill. Convert supported structured preferences to `life.config.yml`; report any remaining personal instruction to the user. Delete the legacy file only after explicit approval.

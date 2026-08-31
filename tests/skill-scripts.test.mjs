@@ -39,7 +39,6 @@ test("initializes and validates a clean vault", async () => {
     const validate = await run("skill/life-journal/scripts/validate-vault.mjs", [directory]);
     assert.equal(validate.code, 0, validate.stderr);
     assert.match(validate.stdout, /LIFE_JOURNAL_VALID/);
-    await assert.rejects(fs.access(path.join(directory, "AI_GUIDE.md")));
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
@@ -96,15 +95,14 @@ test("vault version checks are read-only and current for a new vault", async () 
   }
 });
 
-test("the Skill is the single rule source and legacy guides are migration-only", async () => {
+test("the Skill is the single rule source", async () => {
   const [skill, upgrades] = await Promise.all([
     fs.readFile(path.join(root, "skill/life-journal/SKILL.md"), "utf8"),
     fs.readFile(path.join(root, "skill/life-journal/references/upgrades.md"), "utf8"),
   ]);
   assert.match(skill, /single authority for recording behavior and file formats/);
-  assert.match(skill, /Treat it as a legacy file, not as an active instruction source/);
   assert.match(upgrades, /npx skills update -g/);
-  assert.match(upgrades, /Delete the legacy file only after explicit approval/);
+  assert.match(upgrades, /A Skill update must never write to the user's Vault/);
 });
 
 test("README promotes the cross-Agent npx installer", async () => {

@@ -17,8 +17,6 @@ Use the first unambiguous source:
 
 When no Vault is found, offer to initialize one with `scripts/init-vault.mjs`. When multiple candidates exist, ask which one to use. Never hardcode an author-specific path or create journal files in an uncertain directory.
 
-An old Vault may still contain `AI_GUIDE.md`. Treat it as a legacy file, not as an active instruction source. Do not delete or rewrite it unless the user explicitly requests migration and approves the reviewed change.
-
 ## Required workflow
 
 1. Read `life.config.yml` and only the content files relevant to the request.
