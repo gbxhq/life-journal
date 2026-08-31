@@ -39,10 +39,14 @@ export default async function PersonDetailPage({ params }: Props) {
       <section className="person-events panel">
         <div className="panel-heading"><div><p className="section-eyebrow">TIMELINE</p><h2>共同经历</h2></div><span>{person.events.length} 条记录</span></div>
         {person.events.map((event) => (
-          <a className="person-event" href={`/journal/diary/${event.sourceDate}`} key={`${event.date}-${event.summary}`}>
+          <Link className="person-event expanded" href={`/journal/diary/${event.sourceDate}`} key={`${event.date}-${event.summary}`}>
             <CalendarDays size={17} />
-            <div><strong>{event.summary}</strong><span>{formatDate(event.date)}</span></div>
-          </a>
+            <div>
+              <span>{formatDate(event.date)}</span>
+              <strong>{event.summary}</strong>
+              {vault.diary.find((entry) => entry.date === event.sourceDate)?.lines.map((line) => <p key={line}>{line}</p>)}
+            </div>
+          </Link>
         ))}
       </section>
     </main>

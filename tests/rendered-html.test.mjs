@@ -21,13 +21,13 @@ test("renders the finished promotional homepage", async () => {
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|Your site is taking shape/);
 });
 
-test("renders the journal dashboard from demo Markdown", async () => {
+test("renders the calendar-first journal page from demo Markdown", async () => {
   const response = await render("/journal");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /林舟的生活记录/);
-  assert.match(html, /最近的日子/);
-  assert.match(html, />10</);
+  assert.match(html, /YOUR DAYS/);
+  assert.match(html, />记录</);
+  assert.match(html, /发布准备/);
 });
 
 test("detail route emits record-specific metadata", async () => {
@@ -37,4 +37,21 @@ test("detail route emits record-specific metadata", async () => {
   assert.match(html, /发布准备/);
   assert.match(html, /发布准备 · 整理方法 · Life Journal/);
   assert.doesNotMatch(html, /og:image[^>]*og\.png/);
+});
+
+test("people page renders related events with diary links", async () => {
+  const response = await render("/journal/people");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /沿青岚湖散步/);
+  assert.match(html, /\/journal\/diary\/2025-10-10/);
+});
+
+test("places page keeps the map surface and pending locations together", async () => {
+  const response = await render("/journal/places");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /高德地图等待配置/);
+  assert.match(html, /待确认地点/);
+  assert.match(html, /青岚湖/);
 });

@@ -24,6 +24,10 @@ capabilities:
     provider: configurable
     api_key_env: MAP_API_KEY
     max_candidates: 5
+  map_display:
+    provider: amap-jsapi-2
+    api_key_env: NEXT_PUBLIC_AMAP_JS_KEY
+    security_code_env: NEXT_PUBLIC_AMAP_SECURITY_CODE
 
 site:
   title: 我的生活记录

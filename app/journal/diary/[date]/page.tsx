@@ -34,7 +34,7 @@ export default async function DiaryDetailPage({ params }: Props) {
 
   return (
     <main className="journal-content detail-content">
-      <Link className="back-link" href="/journal/diary"><ArrowLeft size={15} /> 返回日记</Link>
+      <Link className="back-link" href="/journal"><ArrowLeft size={15} /> 返回记录</Link>
       <article className="diary-detail">
         <header>
           <time dateTime={entry.date}>{entry.date}</time>

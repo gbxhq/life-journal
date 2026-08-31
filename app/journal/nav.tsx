@@ -1,21 +1,23 @@
 import {
   BookOpen,
+  CalendarDays,
   Compass,
-  House,
   Lightbulb,
+  LayoutGrid,
   MapPinned,
-  NotebookText,
   Search,
   Sparkles,
   Users,
 } from "lucide-react";
 import Link from "next/link";
 
-export const journalNavigation = [
-  { href: "/journal", label: "总览", icon: House },
-  { href: "/journal/diary", label: "日记", icon: NotebookText },
+export const primaryNavigation = [
+  { href: "/journal", label: "记录", icon: CalendarDays },
   { href: "/journal/people", label: "人物", icon: Users },
   { href: "/journal/places", label: "地点", icon: MapPinned },
+];
+
+export const secondaryNavigation = [
   { href: "/journal/media", label: "媒体", icon: BookOpen },
   { href: "/journal/thoughts", label: "感悟", icon: Lightbulb },
   { href: "/journal/experiences", label: "经验", icon: Sparkles },
@@ -33,12 +35,20 @@ export function JournalNav() {
         </span>
       </Link>
       <nav className="journal-nav" aria-label="生活记录导航">
-        {journalNavigation.map(({ href, label, icon: Icon }) => (
-          <a href={href} key={href}>
+        {primaryNavigation.map(({ href, label, icon: Icon }) => (
+          <Link href={href} key={href}>
             <Icon aria-hidden="true" size={17} strokeWidth={1.8} />
             <span>{label}</span>
-          </a>
+          </Link>
         ))}
+        <details className="sidebar-other">
+          <summary><LayoutGrid aria-hidden="true" size={17} strokeWidth={1.8} /><span>其他</span></summary>
+          <div>
+            {secondaryNavigation.map(({ href, label, icon: Icon }) => (
+              <Link href={href} key={href}><Icon aria-hidden="true" size={15} /><span>{label}</span></Link>
+            ))}
+          </div>
+        </details>
       </nav>
       <div className="sidebar-note">
         <Compass aria-hidden="true" size={17} />

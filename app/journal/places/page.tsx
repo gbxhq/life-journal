@@ -1,49 +1,46 @@
 import type { Metadata } from "next";
-import { MapPinned, Navigation, ShieldCheck } from "lucide-react";
+import { AlertCircle, MapPinned } from "lucide-react";
 import { formatDate, vault } from "@/lib/vault";
+import { AmapPlaceMap } from "./amap-map";
 
 export const metadata: Metadata = {
   title: "到访地点 · Life Journal",
-  description: "只展示确认本人真实到访的地点和对应日记。",
+  description: "在高德地图中浏览已确认地点，并查看仍待确认的地点。",
 };
 
 export default function PlacesPage() {
+  const confirmed = vault.places.filter((place) => Boolean(place.coordinate));
+  const pending = vault.places.filter((place) => !place.coordinate);
+
   return (
-    <main className="journal-content">
+    <main className="journal-content places-page">
       <header className="journal-page-header compact">
         <div>
-          <p className="section-eyebrow">VISITED PLACES</p>
+          <p className="section-eyebrow">PLACES & EVENTS</p>
           <h1>地点</h1>
-          <p>计划不是足迹。这里只留下确认本人真正到达过的地方。</p>
+          <p>地图只展示坐标已经确认的到访地点，点击标记可以回到相关日记。</p>
         </div>
         <span className="header-icon"><MapPinned size={24} /></span>
       </header>
 
-      <section className="place-overview panel">
-        <div><Navigation size={20} /><strong>{vault.summary.places}</strong><span>已记录地点</span></div>
-        <div><ShieldCheck size={20} /><strong>{vault.summary.confirmedPlaces}</strong><span>坐标已确认</span></div>
-        <p>精确坐标在当前 Demo 中默认隐藏，页面只显示坐标状态和坐标系。</p>
-      </section>
+      <AmapPlaceMap
+        places={confirmed}
+        apiKey={process.env.NEXT_PUBLIC_AMAP_JS_KEY ?? ""}
+        securityCode={process.env.NEXT_PUBLIC_AMAP_SECURITY_CODE ?? ""}
+      />
 
-      <section className="places-grid">
-        {vault.places.map((place, index) => (
-          <article className="place-card" key={place.id}>
-            <div className={`place-visual place-visual-${(index % 4) + 1}`}>
+      <section className="pending-places">
+        <header><div><p className="section-eyebrow">PENDING CONFIRMATION</p><h2>待确认地点</h2></div><span>{pending.length} 个</span></header>
+        <p className="pending-description">这些地点已经确认到访，但坐标或具体位置尚未确认。这里只做展示，不在页面中直接修改。</p>
+        <div>
+          {pending.map((place) => (
+            <article key={place.id}>
+              <AlertCircle size={18} />
+              <div><h3>{place.name}</h3><p>{place.adminArea}</p>{place.visits.map((visit) => <a href={`/journal/diary/${visit.sourceDate}`} key={visit.date}>{formatDate(visit.date)} · {visit.summary}</a>)}</div>
               <span>{place.type}</span>
-              <MapPinned size={28} strokeWidth={1.4} />
-            </div>
-            <div className="place-card-body">
-              <div className="place-title"><h2>{place.name}</h2><span className={place.coordinate ? "coordinate confirmed" : "coordinate"}>{place.coordinate ? "已确认" : "待确认"}</span></div>
-              <p>{place.adminArea}</p>
-              {place.coordinate && <small>{place.coordinate.system} · 精确坐标已隐藏</small>}
-              <div className="visit-list">
-                {place.visits.map((visit) => (
-                  <a href={`/journal/diary/${visit.sourceDate}`} key={visit.date}><time>{formatDate(visit.date, { month: "numeric", day: "numeric" })}</time><span>{visit.summary}</span></a>
-                ))}
-              </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   );

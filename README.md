@@ -24,6 +24,8 @@ LIFE_JOURNAL_HOME=/path/to/your/vault npm run dev
 
 真实 Vault 建议只在本机运行，不应直接部署到公开互联网。
 
+地点页使用高德地图 JavaScript API 2.0。需要在本地或托管环境配置 `NEXT_PUBLIC_AMAP_JS_KEY` 和 `NEXT_PUBLIC_AMAP_SECURITY_CODE`；未配置时页面会保留地点内容和配置提示，不会使用作者的私有地图凭据。
+
 ## 安装 Skill
 
 站点构建会生成 `public/life-journal-skill.tar.gz`。解压后将 `life-journal` 文件夹放入 Codex 的 Skill 目录，或直接从源码使用：

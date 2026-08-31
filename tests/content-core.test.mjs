@@ -3,6 +3,7 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { loadVault, parseDiary, parseMedia } from "../lib/content-core.mjs";
+import { entriesForCalendar, monthGrid, shiftMonth } from "../lib/calendar.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -33,4 +34,13 @@ test("filters empty media rows", () => {
   const items = parseMedia(`## 电影\n\n### 已看\n\n| 日期 | 片名 | 年份 | 感想 |\n|---|---|---|---|\n| | | | |\n| 2025-01-02 | 《示例电影》 | 2024 | 很安静 |`);
   assert.equal(items.length, 1);
   assert.equal(items[0].title, "《示例电影》");
+});
+
+test("calendar month navigation and date filtering stay in sync", () => {
+  assert.equal(shiftMonth("2025-12", 1), "2026-01");
+  assert.equal(shiftMonth("2025-01", -1), "2024-12");
+  assert.equal(monthGrid("2025-10").filter(Boolean).length, 31);
+  const entries = [{ date: "2025-10-12" }, { date: "2025-10-10" }, { date: "2025-09-30" }];
+  assert.deepEqual(entriesForCalendar(entries, "2025-10", null).map((entry) => entry.date), ["2025-10-12", "2025-10-10"]);
+  assert.deepEqual(entriesForCalendar(entries, "2025-10", "2025-10-10").map((entry) => entry.date), ["2025-10-10"]);
 });
