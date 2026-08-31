@@ -1,7 +1,18 @@
 import { sites } from "@openai/sites-vite-plugin";
 import vinext from "vinext";
 import { defineConfig } from "vite";
-import hostingConfig from "./.openai/hosting.json";
+import fs from "node:fs";
+
+let hostingConfig: { project_id?: string; d1?: string | null; r2?: string | null } = {
+  project_id: "",
+  d1: null,
+  r2: null,
+};
+if (fs.existsSync("./.openai/hosting.json")) {
+  try {
+    hostingConfig = JSON.parse(fs.readFileSync("./.openai/hosting.json", "utf-8"));
+  } catch {}
+}
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
   "00000000-0000-4000-8000-000000000000";

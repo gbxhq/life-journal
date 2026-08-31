@@ -7,34 +7,6 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 const outDir = path.join(rootDir, 'out');
 
-async function renderRoute(pathname) {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("export", `${Date.now()}-${pathname}`);
-  const { default: worker } = await import(workerUrl.href);
-
-  const clientAssetsDir = path.join(rootDir, 'dist', 'client');
-  const response = await worker.fetch(
-    new Request(`http://localhost${pathname}`, { headers: { accept: "text/html" } }),
-    {
-      ASSETS: {
-        fetch: async (req) => {
-          const u = new URL(req.url);
-          const relPath = u.pathname.replace(/^\//, '');
-          const filePath = path.join(clientAssetsDir, relPath);
-          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            const data = fs.readFileSync(filePath);
-            return new Response(data, { status: 200 });
-          }
-          return new Response("Not found", { status: 404 });
-        }
-      }
-    },
-    { waitUntil() {}, passThroughOnException() {} }
-  );
-
-  return response;
-}
-
 async function exportAll() {
   console.log('Building static export into out/...');
   fs.rmSync(outDir, { recursive: true, force: true });
@@ -46,9 +18,21 @@ async function exportAll() {
     fs.cpSync(distClientDir, outDir, { recursive: true });
   }
 
-  // 2. Load vault data to discover routes
+  // 2. Load worker
+  const workerFile = path.join(rootDir, 'dist', 'server', 'index.js');
+  if (!fs.existsSync(workerFile)) {
+    console.error('Missing dist/server/index.js build output');
+    process.exit(1);
+  }
+
+  const { default: worker } = await import(workerFile);
+
+  // 3. Load vault data to discover routes
   const vaultPath = path.join(rootDir, 'generated', 'vault.json');
-  const contentData = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+  let contentData = { diary: [], people: [], experiences: [] };
+  if (fs.existsSync(vaultPath)) {
+    contentData = JSON.parse(fs.readFileSync(vaultPath, 'utf-8'));
+  }
 
   const routes = [
     '/',
@@ -81,23 +65,45 @@ async function exportAll() {
   console.log(`Prerendering ${routes.length} routes...`);
 
   for (const r of routes) {
-    const res = await renderRoute(r);
-    if (res.status !== 200) {
-      console.error(`Failed to prerender route ${r}: status ${res.status}`);
-      continue;
-    }
-    const html = await res.text();
-    
-    let targetFilePath;
-    if (r === '/') {
-      targetFilePath = path.join(outDir, 'index.html');
-    } else {
-      const folderPath = path.join(outDir, r.replace(/^\//, ''));
-      fs.mkdirSync(folderPath, { recursive: true });
-      targetFilePath = path.join(folderPath, 'index.html');
-    }
+    try {
+      const response = await worker.fetch(
+        new Request(`http://localhost${r}`, { headers: { accept: "text/html" } }),
+        {
+          ASSETS: {
+            fetch: async (req) => {
+              const u = new URL(req.url);
+              const relPath = u.pathname.replace(/^\//, '');
+              const filePath = path.join(distClientDir, relPath);
+              if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+                const data = fs.readFileSync(filePath);
+                return new Response(data, { status: 200 });
+              }
+              return new Response("Not found", { status: 404 });
+            }
+          }
+        },
+        { waitUntil() {}, passThroughOnException() {} }
+      );
 
-    fs.writeFileSync(targetFilePath, html, 'utf-8');
+      if (response.status !== 200) {
+        console.warn(`Warning: Route ${r} returned status ${response.status}`);
+        continue;
+      }
+      const html = await response.text();
+      
+      let targetFilePath;
+      if (r === '/') {
+        targetFilePath = path.join(outDir, 'index.html');
+      } else {
+        const folderPath = path.join(outDir, r.replace(/^\//, ''));
+        fs.mkdirSync(folderPath, { recursive: true });
+        targetFilePath = path.join(folderPath, 'index.html');
+      }
+
+      fs.writeFileSync(targetFilePath, html, 'utf-8');
+    } catch (err) {
+      console.warn(`Warning: Could not prerender route ${r}:`, err.message);
+    }
   }
 
   // Handle redirect for /journal/diary -> /journal
@@ -113,6 +119,6 @@ async function exportAll() {
 }
 
 exportAll().catch(err => {
-  console.error(err);
+  console.error('Export critical error:', err);
   process.exit(1);
 });
