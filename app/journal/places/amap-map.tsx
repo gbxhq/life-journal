@@ -1,7 +1,6 @@
 "use client";
 
 import { ExternalLink, MapPin, MessageCircleMore } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { Place } from "@/lib/vault";
 
@@ -124,9 +123,9 @@ export function AmapPlaceMap({ places, apiKey, securityCode }: { places: Place[]
           <header><div><span>{selected.type}</span><h2>{selected.name}</h2><p>{selected.adminArea}</p></div><small>{selected.coordinate?.system}</small></header>
           <div className="map-place-events">
             {selected.visits.map((visit) => (
-              <Link href={`/journal/diary/${visit.sourceDate}`} key={`${selected.id}-${visit.date}`}>
+              <a href={`/journal/diary/${visit.sourceDate}`} key={`${selected.id}-${visit.date}`}>
                 <time>{visit.date}</time><span>{visit.summary}</span><ExternalLink size={14} />
-              </Link>
+              </a>
             ))}
           </div>
         </article>

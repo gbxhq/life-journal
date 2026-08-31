@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowLeft, CalendarDays, CircleHelp, ClipboardCheck, History, Sparkles } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { vault } from "@/lib/vault";
 
@@ -42,7 +41,7 @@ export default async function ExperienceDetailPage({ params }: Props) {
 
   return (
     <main className="journal-content detail-content">
-      <Link className="back-link" href="/journal/experiences"><ArrowLeft size={15} /> 返回经验</Link>
+      <a className="back-link" href="/journal/experiences"><ArrowLeft size={15} /> 返回经验</a>
       <header className="experience-detail-header">
         <div className="label-row"><span>{experience.category}</span><span>{experience.status}</span></div>
         <h1>{experience.title}</h1>

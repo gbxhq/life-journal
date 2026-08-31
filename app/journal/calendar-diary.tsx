@@ -1,10 +1,9 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, FileText } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { DiaryEntry } from "@/lib/vault";
-import { entriesForCalendar, monthGrid, shiftMonth } from "@/lib/calendar.mjs";
+import { entriesForCalendar, lunarDayLabel, monthGrid, shiftMonth } from "@/lib/calendar.mjs";
 
 const weekDays = ["一", "二", "三", "四", "五", "六", "日"];
 
@@ -30,15 +29,8 @@ export function CalendarDiary({ entries }: { entries: DiaryEntry[] }) {
   return (
     <main className="journal-content time-page">
       <header className="time-page-header">
-        <div>
-          <p className="section-eyebrow">YOUR DAYS</p>
-          <h1>记录</h1>
-          <p>从日历进入一天。再次点选同一天，返回这个月的全部记录。</p>
-        </div>
-        <div className="calendar-legend" aria-label="日历图例">
-          <span><i className="recorded-dot" />有记录</span>
-          <span><i />未记录</span>
-        </div>
+        <p className="section-eyebrow">YOUR DAYS</p>
+        <h1>记录</h1>
       </header>
 
       <section className="calendar-panel" aria-label={`${year}年${Number(month)}月日历`}>
@@ -56,16 +48,18 @@ export function CalendarDiary({ entries }: { entries: DiaryEntry[] }) {
             const date = `${visibleMonth}-${String(day).padStart(2, "0")}`;
             const recorded = recordDates.has(date);
             const selected = selectedDate === date;
+            const lunar = lunarDayLabel(date);
             return (
               <button
                 type="button"
                 className={`${recorded ? "has-record" : "no-record"} ${selected ? "is-selected" : ""}`}
                 aria-pressed={selected}
-                aria-label={`${date}${recorded ? "，有记录" : "，未记录"}`}
+                aria-label={`${date}，农历${lunar}${recorded ? "，有记录" : "，未记录"}`}
                 onClick={() => selectDay(day)}
                 key={date}
               >
-                <span>{day}</span>
+                <span className="solar-day">{day}</span>
+                <small className="lunar-day">{lunar}</small>
                 {recorded && <i />}
               </button>
             );
@@ -85,7 +79,7 @@ export function CalendarDiary({ entries }: { entries: DiaryEntry[] }) {
         {shownEntries.length > 0 ? (
           <div className="calendar-entry-list">
             {shownEntries.map((entry) => (
-              <Link className="calendar-entry" href={`/journal/diary/${entry.date}`} key={entry.date}>
+              <a className="calendar-entry" href={`/journal/diary/${entry.date}`} key={entry.date}>
                 <time dateTime={entry.date}>
                   <strong>{entry.date.slice(8)}</strong>
                   <span>{entry.weekday}</span>
@@ -96,7 +90,7 @@ export function CalendarDiary({ entries }: { entries: DiaryEntry[] }) {
                   {entry.lines.slice(1, 3).map((line) => <p key={line}>{line}</p>)}
                 </div>
                 <FileText aria-hidden="true" size={18} />
-              </Link>
+              </a>
             ))}
           </div>
         ) : (

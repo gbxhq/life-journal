@@ -1,0 +1,28 @@
+{
+  "name": "life-journal",
+  "version": "0.1.0",
+  "description": "Maintain a private, local-first Markdown life journal with an AI Agent.",
+  "author": {
+    "name": "Life Journal contributors",
+    "url": "https://life-journal.ixs.im"
+  },
+  "homepage": "https://life-journal.ixs.im",
+  "repository": "https://github.com/gbxhq/life-journal",
+  "license": "MIT",
+  "keywords": ["journal", "markdown", "local-first", "life-log"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Life Journal",
+    "shortDescription": "用一两句话维护本地 Markdown 人生记录",
+    "longDescription": "让 Agent 整理简短事实，并分别维护人物、地点、感悟、经验和媒体记录。Markdown 始终保存在用户自己的目录中。",
+    "developerName": "Life Journal contributors",
+    "category": "Productivity",
+    "capabilities": ["Read local Markdown", "Write local Markdown", "Start local Web reader"],
+    "websiteURL": "https://life-journal.ixs.im",
+    "defaultPrompt": [
+      "帮我记录今天发生的事。",
+      "帮我回顾最近一个月的重要记录。",
+      "启动 Life Journal 的本地前端。"
+    ]
+  }
+}

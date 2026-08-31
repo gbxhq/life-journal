@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowLeft, MapPin, Sparkles, Users } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDate, relatedExperiences, relatedPeople, relatedPlaces, vault } from "@/lib/vault";
 
@@ -34,7 +33,7 @@ export default async function DiaryDetailPage({ params }: Props) {
 
   return (
     <main className="journal-content detail-content">
-      <Link className="back-link" href="/journal"><ArrowLeft size={15} /> 返回记录</Link>
+      <a className="back-link" href="/journal"><ArrowLeft size={15} /> 返回记录</a>
       <article className="diary-detail">
         <header>
           <time dateTime={entry.date}>{entry.date}</time>

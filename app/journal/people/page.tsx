@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowRight, Users } from "lucide-react";
-import Link from "next/link";
 import { formatDate, vault } from "@/lib/vault";
 
 export const metadata: Metadata = {
@@ -26,13 +25,13 @@ export default function PeoplePage() {
             <header>
               <div className={`avatar avatar-${(index % 4) + 1}`}>{person.name.slice(0, 1)}</div>
               <div><h2>{person.name}</h2><p>{person.description}</p></div>
-              <Link href={`/journal/people/${person.id}`}>全部经历 <ArrowRight size={14} /></Link>
+              <a href={`/journal/people/${person.id}`}>全部经历 <ArrowRight size={14} /></a>
             </header>
             <div className="person-related-events">
               {person.events.map((event) => {
                 const diary = vault.diary.find((entry) => entry.date === event.sourceDate);
                 return (
-                  <Link href={`/journal/diary/${event.sourceDate}`} key={`${person.id}-${event.date}-${event.summary}`}>
+                  <a href={`/journal/diary/${event.sourceDate}`} key={`${person.id}-${event.date}-${event.summary}`}>
                     <time dateTime={event.date}><strong>{event.date.slice(8)}</strong><span>{formatDate(event.date, { month: "short" })}</span></time>
                     <div>
                       <span>{event.summary}</span>
@@ -40,7 +39,7 @@ export default function PeoplePage() {
                       <p>{diary?.lines.slice(0, 2).join(" ")}</p>
                     </div>
                     <ArrowRight size={15} />
-                  </Link>
+                  </a>
                 );
               })}
             </div>

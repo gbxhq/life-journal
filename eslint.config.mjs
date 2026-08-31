@@ -23,6 +23,11 @@ const eslintConfig = defineConfig([
   jsxA11y.flatConfigs.recommended,
   next.configs["core-web-vitals"],
   {
+    rules: {
+      // Vinext's deployed client router currently rewrites Link clicks back to /journal.
+      // Native anchors keep every generated Markdown route usable until that runtime bug is fixed.
+      "@next/next/no-html-link-for-pages": "off",
+    },
     languageOptions: {
       globals: {
         ...globals.browser,

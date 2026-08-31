@@ -1,4 +1,9 @@
 version: 1
+schema_version: 1
+guide_version: 1
+
+demo:
+  fictional: true
 
 journal:
   locale: zh-CN

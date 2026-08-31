@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowLeft, CalendarDays } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDate, vault } from "@/lib/vault";
 
@@ -31,7 +30,7 @@ export default async function PersonDetailPage({ params }: Props) {
 
   return (
     <main className="journal-content detail-content">
-      <Link className="back-link" href="/journal/people"><ArrowLeft size={15} /> 返回人物</Link>
+      <a className="back-link" href="/journal/people"><ArrowLeft size={15} /> 返回人物</a>
       <header className="person-detail-header">
         <div className="avatar avatar-large">{person.name.slice(0, 1)}</div>
         <div><p className="section-eyebrow">SHARED MOMENTS</p><h1>{person.name}</h1><p>{person.description}</p></div>
@@ -39,14 +38,14 @@ export default async function PersonDetailPage({ params }: Props) {
       <section className="person-events panel">
         <div className="panel-heading"><div><p className="section-eyebrow">TIMELINE</p><h2>共同经历</h2></div><span>{person.events.length} 条记录</span></div>
         {person.events.map((event) => (
-          <Link className="person-event expanded" href={`/journal/diary/${event.sourceDate}`} key={`${event.date}-${event.summary}`}>
+          <a className="person-event expanded" href={`/journal/diary/${event.sourceDate}`} key={`${event.date}-${event.summary}`}>
             <CalendarDays size={17} />
             <div>
               <span>{formatDate(event.date)}</span>
               <strong>{event.summary}</strong>
               {vault.diary.find((entry) => entry.date === event.sourceDate)?.lines.map((line) => <p key={line}>{line}</p>)}
             </div>
-          </Link>
+          </a>
         ))}
       </section>
     </main>

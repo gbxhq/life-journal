@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight, FileCog, FileText, Settings2 } from "lucide-react";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "记录方法 · Life Journal",
@@ -11,7 +10,7 @@ export default function MethodPage() {
   return (
     <main className="method-page">
       <header className="method-page-header">
-        <Link className="back-link" href="/"><ArrowLeft size={15} /> 返回首页</Link>
+        <a className="back-link" href="/"><ArrowLeft size={15} /> 返回首页</a>
         <p className="eyebrow">THE LIFE JOURNAL METHOD</p>
         <h1>记录事实，连接生活，<br />沉淀可以继续修订的经验。</h1>
         <p>Life Journal 把可读的 Markdown、可执行的 AI Skill 和只读 Web 界面组合在一起。任何展示都可以重建，原始记录始终由用户掌握。</p>

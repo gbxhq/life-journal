@@ -20,6 +20,17 @@ function run(script, args) {
   });
 }
 
+async function listFiles(directory, prefix = "") {
+  const entries = await fs.readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+    const relative = path.join(prefix, entry.name);
+    if (entry.isDirectory()) files.push(...await listFiles(path.join(directory, entry.name), relative));
+    else files.push(relative);
+  }
+  return files;
+}
+
 test("initializes and validates a clean vault", async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), "life-journal-test-"));
   try {
@@ -54,4 +65,68 @@ test("diary upsert is idempotent", async () => {
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
+});
+
+test("skill routes Web reader requests to private deployment guidance", async () => {
+  const [skill, guide] = await Promise.all([
+    fs.readFile(path.join(root, "skill/life-journal/SKILL.md"), "utf8"),
+    fs.readFile(path.join(root, "skill/life-journal/references/web-reader.md"), "utf8"),
+  ]);
+  assert.match(skill, /references\/web-reader\.md/);
+  assert.match(guide, /LIFE_JOURNAL_HOME=\/path\/to\/vault npm run dev/);
+  assert.match(guide, /perform the startup workflow instead of only printing commands/);
+  assert.match(guide, /no built-in password or authentication/);
+  assert.match(guide, /Do not expose the reader port directly to the public Internet/);
+});
+
+test("vault version checks are read-only and current for a new vault", async () => {
+  const directory = await fs.mkdtemp(path.join(os.tmpdir(), "life-journal-version-"));
+  try {
+    await run("skill/life-journal/scripts/init-vault.mjs", [directory]);
+    const check = await run("skill/life-journal/scripts/check-vault-version.mjs", [directory]);
+    assert.equal(check.code, 0, check.stderr);
+    assert.deepEqual(JSON.parse(check.stdout), {
+      status: "current",
+      installed: { schema: 1, guide: 1 },
+      current: { schema: 1, guide: 1 },
+    });
+  } finally {
+    await fs.rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("skill upgrades never overwrite an existing Vault guide", async () => {
+  const [skill, upgrades] = await Promise.all([
+    fs.readFile(path.join(root, "skill/life-journal/SKILL.md"), "utf8"),
+    fs.readFile(path.join(root, "skill/life-journal/references/upgrades.md"), "utf8"),
+  ]);
+  assert.match(skill, /Never replace an existing Vault's `AI_GUIDE\.md`/);
+  assert.match(upgrades, /Updating the Plugin must never write to the user's Vault/);
+  assert.match(upgrades, /Ask for confirmation before writing/);
+});
+
+test("the Plugin distribution contains the exact standalone Skill source", async () => {
+  const source = path.join(root, "skill/life-journal");
+  const packaged = path.join(root, "plugins/life-journal/skills/life-journal");
+  const files = await listFiles(source);
+  assert.deepEqual(await listFiles(packaged), files);
+  for (const file of files) {
+    const [left, right] = await Promise.all([
+      fs.readFile(path.join(source, file)),
+      fs.readFile(path.join(packaged, file)),
+    ]);
+    assert.deepEqual(right, left, file);
+  }
+});
+
+test("the repository exposes a valid Life Journal marketplace entry", async () => {
+  const [plugin, marketplace] = await Promise.all([
+    fs.readFile(path.join(root, "plugins/life-journal/.codex-plugin/plugin.json"), "utf8").then(JSON.parse),
+    fs.readFile(path.join(root, ".agents/plugins/marketplace.json"), "utf8").then(JSON.parse),
+  ]);
+  assert.equal(plugin.name, "life-journal");
+  assert.equal(plugin.skills, "./skills/");
+  assert.equal(plugin.homepage, "https://life-journal.ixs.im");
+  assert.equal(marketplace.name, "life-journal");
+  assert.equal(marketplace.plugins[0].source.path, "./plugins/life-journal");
 });

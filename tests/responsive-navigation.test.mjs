@@ -15,6 +15,10 @@ test("mobile navigation keeps the three primary modules and an Other entry", asy
   assert.match(navigation, /label: "感悟"/);
   assert.match(navigation, /label: "经验"/);
   assert.match(mobileNav, />其他</);
+  assert.match(mobileNav, /href=\{href\}/);
+  assert.match(navigation, /href=\{href\}/);
+  assert.doesNotMatch(mobileNav, /next\/link/);
+  assert.doesNotMatch(navigation, /next\/link/);
   assert.match(css, /grid-template-columns:\s*repeat\(4, minmax\(0, 1fr\)\)/);
   assert.doesNotMatch(css, /^\s*nav a:not\(\.nav-action\)/m);
 });

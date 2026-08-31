@@ -1,7 +1,6 @@
 "use client";
 
 import { LayoutGrid, X } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { primaryNavigation, secondaryNavigation } from "./nav";
 
@@ -17,10 +16,10 @@ export function MobileJournalNav() {
             <header><div><p className="section-eyebrow">MORE</p><h2>其他</h2></div><button type="button" onClick={() => setOtherOpen(false)} aria-label="关闭"><X size={20} /></button></header>
             <div>
               {secondaryNavigation.map(({ href, label, icon: Icon }) => (
-                <Link href={href} key={href} onClick={() => setOtherOpen(false)}>
+                <a href={href} key={href}>
                   <Icon aria-hidden="true" size={20} />
                   <span>{label}</span>
-                </Link>
+                </a>
               ))}
             </div>
           </section>
@@ -28,10 +27,10 @@ export function MobileJournalNav() {
       )}
       <nav className="mobile-journal-nav" aria-label="移动端生活记录导航">
         {primaryNavigation.map(({ href, label, icon: Icon }) => (
-          <Link href={href} key={href}>
+          <a href={href} key={href}>
             <Icon aria-hidden="true" size={20} />
             <span>{label}</span>
-          </Link>
+          </a>
         ))}
         <button type="button" onClick={() => setOtherOpen(true)} aria-expanded={otherOpen}>
           <LayoutGrid aria-hidden="true" size={20} />

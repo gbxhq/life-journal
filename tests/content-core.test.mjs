@@ -2,8 +2,8 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { loadVault, parseDiary, parseMedia } from "../lib/content-core.mjs";
-import { entriesForCalendar, monthGrid, shiftMonth } from "../lib/calendar.mjs";
+import { loadVault, parseDiary, parseMedia, slugify } from "../lib/content-core.mjs";
+import { entriesForCalendar, lunarDayLabel, monthGrid, shiftMonth } from "../lib/calendar.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -30,6 +30,11 @@ test("parses diary metadata and ignores non-date headings", () => {
   assert.equal(entries[0].lines[0], "一件事实");
 });
 
+test("creates route-safe identifiers for Chinese names", () => {
+  assert.equal(slugify("阿澄"), "u-963f-6f84");
+  assert.equal(slugify("Alice Chen"), "alice-chen");
+});
+
 test("filters empty media rows", () => {
   const items = parseMedia(`## 电影\n\n### 已看\n\n| 日期 | 片名 | 年份 | 感想 |\n|---|---|---|---|\n| | | | |\n| 2025-01-02 | 《示例电影》 | 2024 | 很安静 |`);
   assert.equal(items.length, 1);
@@ -40,6 +45,8 @@ test("calendar month navigation and date filtering stay in sync", () => {
   assert.equal(shiftMonth("2025-12", 1), "2026-01");
   assert.equal(shiftMonth("2025-01", -1), "2024-12");
   assert.equal(monthGrid("2025-10").filter(Boolean).length, 31);
+  assert.equal(lunarDayLabel("2025-10-01"), "初十");
+  assert.equal(lunarDayLabel("2025-10-12"), "廿一");
   const entries = [{ date: "2025-10-12" }, { date: "2025-10-10" }, { date: "2025-09-30" }];
   assert.deepEqual(entriesForCalendar(entries, "2025-10", null).map((entry) => entry.date), ["2025-10-12", "2025-10-10"]);
   assert.deepEqual(entriesForCalendar(entries, "2025-10", "2025-10-10").map((entry) => entry.date), ["2025-10-10"]);

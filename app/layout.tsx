@@ -1,21 +1,17 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import "./globals.css";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3000";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const image = `${protocol}://${host}/og.png`;
-  const title = "Life Journal · 用 Markdown 记录人生";
-  const description = "一套由 AI 协助维护、以 Markdown 为唯一数据源的本地优先人生记录系统。";
-  return {
-    title,
-    description,
-    openGraph: { title, description, type: "website", images: [{ url: image, width: 1200, height: 630, alt: "Life Journal" }] },
-    twitter: { card: "summary_large_image", title, description, images: [image] },
-  };
-}
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://life-journal.ixs.im";
+const title = "Life Journal · 用一两句话记录每天发生的事";
+const description = "一个由 Agent 协助整理的 Markdown 人生记录 Skill：事实保持简短，感悟、人物、地点、经验和媒体分别归档。";
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  openGraph: { title, description, type: "website", images: [{ url: "/og.png", width: 1200, height: 630, alt: "Life Journal" }] },
+  twitter: { card: "summary_large_image", title, description, images: ["/og.png"] },
+};
 
 export default function RootLayout({
   children,
