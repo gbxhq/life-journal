@@ -29,7 +29,9 @@ test("renders the finished promotional homepage", async () => {
   assert.match(html, /相册/);
   assert.match(html, /待开发/);
   assert.match(html, /直接让 Agent 帮你启动/);
-  assert.match(html, /\$life-journal 启动这个项目的前端/);
+  assert.match(html, /请用 Life Journal 启动这个项目的前端/);
+  assert.match(html, /npx skills add gbxhq\/life-journal -g/);
+  assert.doesNotMatch(html, /AI_GUIDE\.md/);
   assert.match(html, /过去一年我看了哪些电影/);
   assert.match(html, /过去一个月我跟阿澄都去过哪里玩/);
   assert.match(html, /媒体附件与相册/);

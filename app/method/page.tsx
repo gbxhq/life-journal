@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight, FileCog, FileText, Settings2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileCog, Settings2 } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "记录方法 · Life Journal",
-  description: "了解 Life Journal 如何用 Skill、AI Guide 和配置文件维护可携带的 Markdown 人生记录。",
+  description: "了解 Life Journal 如何用一个完整 Skill 和结构化配置维护可携带的 Markdown 人生记录。",
 };
 
 export default function MethodPage() {
@@ -25,18 +25,16 @@ export default function MethodPage() {
       </section>
 
       <section className="responsibility-section">
-        <header><p className="eyebrow">CLEAR RESPONSIBILITIES</p><h2>三个文件，各自只做一件事。</h2></header>
+        <header><p className="eyebrow">CLEAR RESPONSIBILITIES</p><h2>规则由 Skill 统一维护，Vault 只保存数据和配置。</h2></header>
         <div className="responsibility-grid">
-          <article><FileCog size={23} /><small>执行入口</small><h3>SKILL.md</h3><p>决定何时触发、如何发现 Vault、怎样安全写入和验证。它不复制用户的完整记录规则。</p></article>
-          <article><FileText size={23} /><small>本地契约</small><h3>AI_GUIDE.md</h3><p>跟随当前 Vault 保存格式、判断标准和个人偏好。把目录交给另一个 AI，规则仍然在。</p></article>
-          <article><Settings2 size={23} /><small>结构化配置</small><h3>life.config.yml</h3><p>保存语言、时区、功能、主题、隐私选项和环境变量名，不保存真实密钥。</p></article>
+          <article><FileCog size={23} /><small>唯一规则源</small><h3>Skill</h3><p>完整包含内容分流、文件格式、人物与地点判断、安全边界、操作流程和验证脚本。通过 npx 更新即可同步整套机制。</p></article>
+          <article><Settings2 size={23} /><small>当前记录库配置</small><h3>life.config.yml</h3><p>只保存语言、时区、功能、主题、隐私选项和环境变量名，不保存行为说明或真实密钥。</p></article>
         </div>
       </section>
 
       <section className="source-truth-section">
         <div><p className="eyebrow">ONE SOURCE OF TRUTH</p><h2>Markdown 是源，页面只是窗口。</h2><p>Web 构建会解析日记目录、生成关系图和搜索索引，但不会成为新的主数据库。删除派生产物后，仍可从 Markdown 完整重建。</p></div>
         <pre><code>{`vault/
-├── AI_GUIDE.md
 ├── life.config.yml
 ├── diary.md
 ├── person.md

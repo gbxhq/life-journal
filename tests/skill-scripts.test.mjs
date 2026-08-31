@@ -39,6 +39,7 @@ test("initializes and validates a clean vault", async () => {
     const validate = await run("skill/life-journal/scripts/validate-vault.mjs", [directory]);
     assert.equal(validate.code, 0, validate.stderr);
     assert.match(validate.stdout, /LIFE_JOURNAL_VALID/);
+    await assert.rejects(fs.access(path.join(directory, "AI_GUIDE.md")));
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
@@ -87,22 +88,30 @@ test("vault version checks are read-only and current for a new vault", async () 
     assert.equal(check.code, 0, check.stderr);
     assert.deepEqual(JSON.parse(check.stdout), {
       status: "current",
-      installed: { schema: 1, guide: 1 },
-      current: { schema: 1, guide: 1 },
+      installed: { schema: 2 },
+      current: { schema: 2 },
     });
   } finally {
     await fs.rm(directory, { recursive: true, force: true });
   }
 });
 
-test("skill upgrades never overwrite an existing Vault guide", async () => {
+test("the Skill is the single rule source and legacy guides are migration-only", async () => {
   const [skill, upgrades] = await Promise.all([
     fs.readFile(path.join(root, "skill/life-journal/SKILL.md"), "utf8"),
     fs.readFile(path.join(root, "skill/life-journal/references/upgrades.md"), "utf8"),
   ]);
-  assert.match(skill, /Never replace an existing Vault's `AI_GUIDE\.md`/);
-  assert.match(upgrades, /Updating the Plugin must never write to the user's Vault/);
-  assert.match(upgrades, /Ask for confirmation before writing/);
+  assert.match(skill, /single authority for recording behavior and file formats/);
+  assert.match(skill, /Treat it as a legacy file, not as an active instruction source/);
+  assert.match(upgrades, /npx skills update -g/);
+  assert.match(upgrades, /Delete the legacy file only after explicit approval/);
+});
+
+test("README promotes the cross-Agent npx installer", async () => {
+  const readme = await fs.readFile(path.join(root, "README.md"), "utf8");
+  assert.match(readme, /npx skills add gbxhq\/life-journal -g/);
+  assert.match(readme, /npx skills update -g/);
+  assert.doesNotMatch(readme, /codex plugin (?:marketplace|add)/);
 });
 
 test("the Plugin distribution contains the exact standalone Skill source", async () => {

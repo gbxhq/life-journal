@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const vault = path.resolve(process.argv[2] || process.env.LIFE_JOURNAL_HOME || ".");
-const required = ["AI_GUIDE.md", "life.config.yml", "diary.md", "person.md", "places.md", "thoughts.md", "media.md", "experiences.md"];
+const required = ["life.config.yml", "diary.md", "person.md", "places.md", "thoughts.md", "media.md", "experiences.md"];
 const issues = [];
 
 for (const file of required) {

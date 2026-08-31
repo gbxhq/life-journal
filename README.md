@@ -21,7 +21,7 @@ Life Journal 的重点是“长期记录”，不是写长文：
 ## 项目包含什么
 
 - `skill/life-journal`：独立 Life Journal Skill 源码（跨 Agent 兼容）。
-- `plugins/life-journal`：Codex Plugin 包装包与 Marketplace 清单。
+- `plugins/life-journal`：为兼容支持 Plugin 的 Agent 保留的包装，不是主要安装方式。
 - `examples/demo-vault`：只用于演示和测试的虚构 Markdown 数据。
 - `app`：宣传页和只读 Web 阅读界面。
 - `lib/content-core.mjs`：Markdown 解析与校验核心。
@@ -33,7 +33,7 @@ Markdown 始终是唯一数据源，网页只是派生的阅读界面。
 
 Life Journal 是一套通用的 Agent Skill 规范，支持 Claude Code、Cursor、Codex、Windsurf 以及各类兼容 Agent。
 
-### 推荐：使用 `npx skills` 一键安装（支持所有 Agent）
+### 使用 `npx skills` 一键安装
 
 无需手动下载或配置，直接通过官方通用 Agent Skills CLI 全局或项目级安装：
 
@@ -45,16 +45,7 @@ npx skills add gbxhq/life-journal -g
 npx skills add gbxhq/life-journal --agent claude-code cursor
 ```
 
-### 备用 1：通过 Codex Plugin Marketplace 安装
-
-如果你使用的是 Codex，可以直接通过 Codex 内置的 Plugin Marketplace 安装与管理：
-
-```bash
-codex plugin marketplace add gbxhq/life-journal
-codex plugin add life-journal@life-journal
-```
-
-### 备用 2：手动解压安装独立 Skill 包
+### 备用：手动解压安装独立 Skill 包
 
 从宣传页下载 `life-journal-skill.tar.gz`，解压后放入对应 Agent 的技能目录（如 `~/.agents/skills/` 或 `~/.codex/skills/`）：
 
@@ -69,25 +60,27 @@ tar -xzf life-journal-skill.tar.gz -C ~/.agents/skills
 
 ```text
 # 初始化一个新的生活记录库
-$life-journal 在 ~/Documents/life-journal-vault 初始化一套新的生活记录
+请用 Life Journal 在 ~/Documents/life-journal-vault 初始化一套新的生活记录
 
 # 日常记日记
-$life-journal 帮我记录今天发生的事
+请用 Life Journal 帮我记录今天发生的事
 ```
 
-## `SKILL.md` 与 `AI_GUIDE.md` 的分工
+## Skill 与 Vault 的分工
 
-- `SKILL.md` 属于安装包，定义 Agent 会做什么、如何定位 Vault、何时读取参考文档以及必须遵守的安全边界。
-- `AI_GUIDE.md` 属于用户自己的 Vault，定义这一个记录库的具体格式和个性化规则。
+- `SKILL.md`、`references/` 和 `scripts/` 共同组成完整能力包，集中定义分类、格式、人物与地点判断、安全边界和验证流程。
+- 用户 Vault 只保存 Markdown 数据与 `life.config.yml`。配置文件负责语言、时区、外部服务、主题和隐私选项，不再承担自然语言行为约束。
 
-因此两者都需要保留。升级 Skill 时只更新安装包，绝不会自动覆盖用户 Vault 中的 `AI_GUIDE.md`。
+从 schema version 2 开始，新 Vault 不再包含 `AI_GUIDE.md`。这样通过 `npx skills update -g` 更新 Skill 时，整套记录机制会一起更新，用户日记不会被覆盖。
+
+旧 Vault 中的 `AI_GUIDE.md` 会被视为遗留文件：系统不会继续把它当规则源，也不会自动删除。用户可以让 Agent 先检查其中是否还有个人定制，再确认迁移和删除。
 
 ## 打开前端阅读界面
 
 最方便的方式是直接让 Agent 启动：
 
 ```text
-$life-journal 启动这个项目的前端
+请用 Life Journal 启动这个项目的前端
 ```
 
 Skill 内置了启动手册。Agent 会定位本仓库和 Vault、验证 Markdown、启动服务，并返回访问地址。
@@ -147,32 +140,25 @@ PORT=3000 npm start
 npx skills update -g
 ```
 
-或者 Codex Plugin 更新：
-
-```bash
-codex plugin marketplace upgrade life-journal
-codex plugin add life-journal@life-journal
-```
-
 ### 检查现有 Vault 是否需要迁移
 
-Skill 安装包更新不会影响你现有的日记和 `AI_GUIDE.md`。可以让 Agent 检查：
+Skill 安装包更新不会影响你现有的日记。可以让 Agent 检查：
 
 ```text
-$life-journal 检查我的日记库是否需要升级，先展示差异，不要直接修改
+请用 Life Journal 检查我的日记库是否需要升级，先展示差异，不要直接修改
 ```
 
-Vault 使用 `schema_version` 和 `guide_version` 记录结构版本。若将来需要迁移，Agent 必须先展示计划和受影响文件，保留用户自定义规则，并在得到确认后才写入。
+Vault 使用 `schema_version` 记录数据结构版本。若将来需要迁移，Agent 必须先展示计划和受影响文件，并在得到确认后才写入。
 
 ## 英文支持
 
-首个公开版本保持中文优先。当前前端文案、Demo、`AI_GUIDE.md`、数据示例和测试都围绕中文设计；现在同时维护完整英文版会显著增加规则同步和测试成本。
+首个公开版本保持中文优先。当前前端文案、Demo、数据示例和测试都围绕中文设计；现在同时维护完整英文版会显著增加规则同步和测试成本。
 
 本 README 先提供下面的英文摘要，完整 i18n 已列入 [TODO.md](TODO.md)。
 
 ### English summary
 
-Life Journal is a local-first Markdown journaling system for short, sustainable life logging. You tell an AI Agent what happened; the Agent keeps factual diary entries concise and maintains separate files for people, places, reflections, reusable experiences, and media. The current release, demo data, Web UI, and Vault guide are Chinese-first. Your Vault remains local and is never overwritten when the Skill is updated.
+Life Journal is a local-first Markdown journaling system for short, sustainable life logging. You tell an AI Agent what happened; the Agent keeps factual diary entries concise and maintains separate files for people, places, reflections, reusable experiences, and media. The current release, demo data, Web UI, and record formats are Chinese-first. Your Vault remains local and is never overwritten when the Skill is updated.
 
 ## 开发与验证
 

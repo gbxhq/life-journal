@@ -1,6 +1,5 @@
 version: 1
-schema_version: 1
-guide_version: 1
+schema_version: 2
 
 demo:
   fictional: true

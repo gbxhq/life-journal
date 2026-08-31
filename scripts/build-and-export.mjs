@@ -1,6 +1,5 @@
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
-import path from 'node:path';
 
 fs.mkdirSync('.wrangler/logs', { recursive: true });
 fs.mkdirSync('.wrangler/registry', { recursive: true });

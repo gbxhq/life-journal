@@ -11,7 +11,9 @@ let hostingConfig: { project_id?: string; d1?: string | null; r2?: string | null
 if (fs.existsSync("./.openai/hosting.json")) {
   try {
     hostingConfig = JSON.parse(fs.readFileSync("./.openai/hosting.json", "utf-8"));
-  } catch {}
+  } catch {
+    // Fall back to the empty local hosting configuration.
+  }
 }
 
 const SITE_CREATOR_PLACEHOLDER_DATABASE_ID =
@@ -54,7 +56,9 @@ export default defineConfig(async () => {
   try {
     fs.mkdirSync(".wrangler/logs", { recursive: true });
     fs.mkdirSync(".wrangler/registry", { recursive: true });
-  } catch {}
+  } catch {
+    // A later build step will surface an unusable local state directory.
+  }
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import("@cloudflare/vite-plugin");

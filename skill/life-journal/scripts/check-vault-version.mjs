@@ -25,12 +25,10 @@ const [templateConfig, vaultConfig] = await Promise.all([
 
 const current = {
   schema: numericField(templateConfig, "schema_version"),
-  guide: numericField(templateConfig, "guide_version"),
 };
 const installed = {
   schema: numericField(vaultConfig, "schema_version"),
-  guide: numericField(vaultConfig, "guide_version"),
 };
-const needsUpgrade = installed.schema < current.schema || installed.guide < current.guide;
+const needsUpgrade = installed.schema < current.schema;
 
 process.stdout.write(`${JSON.stringify({ status: needsUpgrade ? "upgrade-available" : "current", installed, current })}\n`);

@@ -13,7 +13,6 @@ const skillRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..
 const templateRoot = path.join(skillRoot, "assets", "vault-template");
 const targetRoot = path.resolve(targetArg);
 const files = [
-  "AI_GUIDE.md",
   "life.config.yml",
   "diary.md",
   "person.md",

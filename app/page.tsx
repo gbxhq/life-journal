@@ -103,7 +103,7 @@ export default function Home() {
         </div>
         <div className="vault-file-list" aria-label="人生记录文件结构">
           <header><FolderTree size={17} /><strong>life-journal/</strong></header>
-          <span><b>AI_GUIDE.md</b><small>当前记录库的规则</small></span>
+          <span><b>life.config.yml</b><small>语言、主题与能力配置</small></span>
           <span><b>diary.md</b><small>每天发生的事实</small></span>
           <span><b>person.md</b><small>人物与共同事件</small></span>
           <span><b>places.md</b><small>地点、坐标与到访</small></span>
@@ -121,7 +121,7 @@ export default function Home() {
         </header>
         <article className="reader-agent-card">
           <header><Bot size={22} /><div><small>推荐方式</small><h3>直接让 Agent 帮你启动</h3></div></header>
-          <div className="reader-agent-prompt"><code>$life-journal 启动这个项目的前端</code></div>
+          <div className="reader-agent-prompt"><code>请用 Life Journal 启动这个项目的前端</code></div>
           <p>Agent 会定位 Life Journal 项目和你的日记目录，先验证 Markdown，再启动本地服务并把访问地址发给你。下面的命令仅作为手动操作备用。</p>
         </article>
         <p className="reader-manual-label">手动启动</p>
@@ -202,8 +202,8 @@ export default function Home() {
       <section className="plain-start-section" id="start">
         <p className="plain-section-label">从今天开始</p>
         <h2>先记下一两句话。<br />以后想补人物、地点和经验，再慢慢整理。</h2>
-        <div className="install-box"><code>$life-journal 帮我记录今天发生的事</code></div>
-        <div className="hero-actions centered-actions"><a className="button button-primary" href="/life-journal-skill.tar.gz" download>下载 Skill</a><a className="button button-quiet" href="/journal">打开示例</a></div>
+        <div className="install-box"><code>npx skills add gbxhq/life-journal -g</code></div>
+        <div className="hero-actions centered-actions"><a className="button button-primary" href="https://github.com/gbxhq/life-journal#安装-skill">查看安装说明</a><a className="button button-quiet" href="/journal">打开示例</a></div>
       </section>
 
       <footer className="plain-landing-footer"><a className="brand" href="#top"><span className="brand-mark">LJ</span><span>人生记录</span></a><p>简短记录，长期保存。</p><span>虚构 Demo · Markdown 数据源</span></footer>
